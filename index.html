@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>맥도날드 키오스크 연습 서비스 | 함께라서 쉬운 디지털</title>
+    <link rel="stylesheet" href="styles.css?v=20261111_04">
+</head>
+<body>
+
+    <!-- ========================================================
+         ✨ 모드 선택 웰컴 모달 (시작 시 기본 활성화)
+         ======================================================== -->
+    <div class="welcome-overlay active" id="welcome-overlay">
+        <div class="welcome-modal-box">
+            <div class="welcome-mcd-logo">M</div>
+            <h1 class="welcome-title">맥도날드 키오스크 연습</h1>
+            <p class="welcome-subtitle">원하는 연습 방식을 선택해 주세요.</p>
+
+            <div class="welcome-mode-cards">
+                <!-- 미션 연습 모드 카드 -->
+                <div class="welcome-card mission-card" id="welcome-btn-mission">
+                    <div class="welcome-card-badge">추천 코스 ⭐</div>
+                    <div class="welcome-card-icon">🛍️</div>
+                    <h2 class="welcome-card-title">미션 연습 모드</h2>
+                    <p class="welcome-card-desc">
+                        <b>빅맥 세트 포장 주문하기</b><br>
+                        밝은 유도등과 화살표를 따라 차근차근 배웁니다.
+                    </p>
+                    <button type="button" class="welcome-start-btn mission-start">
+                        미션 시작하기 →
+                    </button>
+                </div>
+
+                <!-- 자유 주문 모드 카드 -->
+                <div class="welcome-card free-card" id="welcome-btn-free">
+                    <div class="welcome-card-badge free-badge">자유 연습 🍟</div>
+                    <div class="welcome-card-icon">🍔</div>
+                    <h2 class="welcome-card-title">자유 주문 모드</h2>
+                    <p class="welcome-card-desc">
+                        실제 매장처럼 빅맥, 감자튀김 등<br>
+                        <b>원하는 메뉴를 자유롭게 담고</b> 결제해 봅니다.
+                    </p>
+                    <button type="button" class="welcome-start-btn free-start">
+                        자유 주문 시작 →
+                    </button>
+                </div>
+            </div>
+
+            <div class="welcome-footer-tip">
+                💡 패드와 스마트폰에서도 화면에 꽉 찬 키오스크로 연습할 수 있습니다.
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         🎯 [미션 시작 목표 카드] 미션 시작 시 크게 각인시켜주는 팝업
+         ======================================================== -->
+    <div class="mission-intro-overlay" id="mission-intro-overlay">
+        <div class="mission-intro-box">
+            <div class="mission-intro-badge">오늘의 주문 미션 🎯</div>
+            <div class="mission-intro-icon">🛍️</div>
+            <h2 class="mission-intro-title">빅맥 세트 1개 포장 주문하기</h2>
+            <div class="mission-intro-checklist">
+                <div>✓ <b>장소:</b> 테이크 아웃 (포장, Take-Out)</div>
+                <div>✓ <b>메뉴:</b> 버거 탭 → 빅맥 → 세트 (M사이즈)</div>
+                <div>✓ <b>음료:</b> 원하는 음료 선택</div>
+                <div>✓ <b>결제:</b> 신용 / 체크카드</div>
+            </div>
+            <p class="mission-intro-sub">
+                깜빡이는 <b>[👉 터치!]</b> 표시와 <b>유도등</b>을 따라 눌러보세요!
+            </p>
+            <button type="button" class="btn-mcd-primary-large" id="btn-start-mission-intro" style="padding: 14px 20px; font-size: 19px;">
+                미션 도전 시작! →
+            </button>
+        </div>
+    </div>
+
+    <!-- 상단 연습 도우미 컨트롤 바 (컴팩트 & 초간결화) -->
+    <header class="practice-top-bar">
+        <div class="top-bar-row-1">
+            <div class="practice-title-group">
+                <div class="mcd-logo-badge">M</div>
+                <h1 class="practice-title">맥도날드 키오스크</h1>
+            </div>
+
+            <div class="practice-controls">
+                <!-- 모드 변경 버튼 (클릭 시 웰컴 모드 선택 화면 다시 열기) -->
+                <button type="button" class="mode-select-opener-btn" id="btn-open-mode-select">
+                    <span id="current-mode-tag">🎯 미션 모드</span>
+                    <span class="change-tag-btn">변경 ▾</span>
+                </button>
+
+                <!-- 유도 가이드 토글 스위치 -->
+                <label class="guide-toggle-label" title="키오스크 화면에서 눌러야 할 곳을 밝은 유도등으로 안내합니다">
+                    <span>유도등</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggle-guide" checked>
+                        <span class="slider"></span>
+                    </label>
+                </label>
+
+                <!-- 효과음 ON/OFF 버튼 -->
+                <button type="button" class="icon-control-btn" id="btn-toggle-sound" title="소리 켜기/끄기">
+                    <span id="sound-icon">🔊</span>
+                </button>
+
+                <!-- 모드 선택창으로 복귀하는 [다시 시작] 버튼 -->
+                <button type="button" class="icon-control-btn reset-btn" id="btn-reset-all" title="처음 모드 선택 화면으로 돌아가기">
+                    🔄 다시 시작
+                </button>
+            </div>
+        </div>
+
+        <!-- 미션 모드 시 현재 단계 안내 (초간결 텍스트) -->
+        <div class="mission-status-bar" id="mission-status-bar">
+            <span class="mission-step-indicator" id="mission-step-badge">1/13</span>
+            <div class="mission-guide-content">
+                <span class="mission-guide-title" id="mission-guide-title">주문 시작</span>
+                <span class="mission-guide-sep">|</span>
+                <span class="mission-guide-text" id="mission-guide-text">화면 맨 아래 노란색 [주문하기] 터치</span>
+            </div>
+            <div class="mission-wrong-warning" id="mission-wrong-warning"></div>
+        </div>
+    </header>
+
+    <!-- 토스트 안내 팝업 메시지 (실수 피드백용) -->
+    <div class="kiosk-toast" id="kiosk-toast">
+        <span class="toast-icon" id="toast-icon">💡</span>
+        <span class="toast-text" id="toast-text">안내 메시지</span>
+    </div>
+
+    <!-- ========================================================
+         실물 키오스크 기기 프레임 (패드/스마트폰 풀스크린 핏)
+         ======================================================== -->
+    <main class="kiosk-device-container">
+        <div class="kiosk-kiosk-body">
+            
+            <!-- 키오스크 상단 베젤 -->
+            <div class="kiosk-top-bezel">
+                <div class="kiosk-camera"></div>
+                <div class="kiosk-speaker-grill"></div>
+            </div>
+
+            <!-- 키오스크 화면 (디스플레이 터치스크린) -->
+            <div class="kiosk-screen" id="kiosk-screen">
+
+                <!-- --------------------------------------------------------
+                     화면 1: 대기 광고 화면 (실제 맥도날드 키오스크 시작 화면)
+                     -------------------------------------------------------- -->
+                <section class="kiosk-view active" id="view-start">
+                    <!-- 최상단 프로모션 띠 -->
+                    <div class="mcd-kiosk-top-strip">
+                        <div class="top-strip-text">
+                            <span class="strip-badge">스페셜 팩 구매시</span>
+                            <span class="strip-highlight">NCT 마크 포토카드 3장 증정!</span>
+                            <span class="strip-sub">매장별 소진 시점 상이</span>
+                        </div>
+                    </div>
+
+                    <!-- 중앙 실제 맥도날드 피자 버거 광고 포스터 영역 -->
+                    <div class="start-kiosk-ad-poster" id="start-hero-ad" title="화면을 터치하면 주문이 시작됩니다">
+                        <!-- 네온사인 PIZZA 로고 -->
+                        <div class="poster-neon-pizza">
+                            <div class="neon-pizza-slice">🍕</div>
+                            <span class="neon-pizza-text">PIZZA</span>
+                        </div>
+
+                        <!-- 버거 라인업 텍스트 -->
+                        <div class="poster-burgers-header">
+                            <div class="poster-burger-item-info left">
+                                <span class="badge-new-item">new</span>
+                                <div class="burger-name-kr">페퍼로니 더블 피자 버거</div>
+                                <div class="burger-name-en">Pepperoni Double Pizza Burger</div>
+                            </div>
+                            <div class="poster-burger-item-info right">
+                                <span class="badge-new-item">new</span>
+                                <div class="burger-name-kr">페퍼로니 메가 피자 버거</div>
+                                <div class="burger-name-en">Pepperoni Mega Pizza Burger</div>
+                            </div>
+                        </div>
+
+                        <!-- 버거 실물 비주얼 그래픽 듀오 -->
+                        <div class="poster-burgers-visual">
+                            <!-- 더블 피자 버거 -->
+                            <div class="visual-burger-card double-burger">
+                                <div class="burger-bun-top">
+                                    <span class="sesame s1"></span>
+                                    <span class="sesame s2"></span>
+                                    <span class="sesame s3"></span>
+                                </div>
+                                <div class="burger-layer-lettuce"></div>
+                                <div class="burger-layer-tomato"></div>
+                                <div class="burger-layer-pepperoni"></div>
+                                <div class="burger-layer-patty"></div>
+                                <div class="burger-layer-cheese"></div>
+                                <div class="burger-bun-bottom"></div>
+                            </div>
+
+                            <!-- 메가 피자 버거 -->
+                            <div class="visual-burger-card mega-burger">
+                                <div class="burger-bun-top mega">
+                                    <span class="sesame s1"></span>
+                                    <span class="sesame s2"></span>
+                                    <span class="sesame s3"></span>
+                                </div>
+                                <div class="burger-layer-lettuce mega"></div>
+                                <div class="burger-layer-tomato mega"></div>
+                                <div class="burger-layer-pepperoni mega"></div>
+                                <div class="burger-layer-patty mega"></div>
+                                <div class="burger-layer-cheese mega"></div>
+                                <div class="burger-layer-patty mega"></div>
+                                <div class="burger-layer-cheese mega"></div>
+                                <div class="burger-bun-bottom mega"></div>
+                            </div>
+                        </div>
+
+                        <!-- 터치 안내 오버레이 힌트 -->
+                        <div class="poster-tap-hint">
+                            <span>👆 화면 아무 곳이나 터치해도 주문이 시작됩니다</span>
+                        </div>
+                    </div>
+
+                    <!-- 중단 노란색 안내문 박스 -->
+                    <div class="start-kiosk-notice-box">
+                        <p class="notice-line">* 카카오 선물하기, 모바일 상품권 사용 가능 (무료 쿠폰 사용은 카운터에서 문의해주세요)</p>
+                        <p class="notice-line">* 현금 결제는 카운터에서만 가능 Please pay at Front Counter for Cash</p>
+                        <p class="notice-line muted">* 상기 이미지는 실제와 다를 수 있습니다.</p>
+                    </div>
+
+                    <!-- 하단 실제 맥도날드 키오스크 시작 조작부 (포인트 적립 & 주문하기 버튼) -->
+                    <div class="start-kiosk-bottom-panel">
+                        <div class="bottom-main-action-grid">
+                            <!-- 좌측: 포인트 적립 박스 -->
+                            <div class="point-earn-box" title="결제 전 포인트 적립 안내">
+                                <div class="point-earn-header">
+                                    <span class="point-title">포인트를 적립하세요</span>
+                                    <span class="point-subtitle">결제 전 선택 필수</span>
+                                </div>
+                                <div class="point-qr-code-icon">
+                                    <svg viewBox="0 0 24 24" width="46" height="46" fill="currentColor">
+                                        <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm13-2h3v3h-3v-3zm0 5h3v3h-3v-3zm-3-5h2v2h-2v-2zm0 3h2v2h-2v-2zm-3-3h2v5h-2v-5zm8 3h2v2h-2v-2z"/>
+                                    </svg>
+                                </div>
+                                <div class="point-arrow-down">∨</div>
+                            </div>
+
+                            <!-- 우측: [주문하기 (Start Order)] 버튼 (사진 속 빨간 박스) -->
+                            <div class="btn-relative-wrap">
+                                <button type="button" class="real-kiosk-order-btn" id="btn-start-order">
+                                    <span class="order-btn-kr">주문하기</span>
+                                    <span class="order-btn-en">(Start Order)</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 최하단 언어 선택 & 장애인 보조 기능 행 -->
+                        <div class="kiosk-accessibility-footer">
+                            <button type="button" class="kiosk-util-chip">
+                                <span class="util-icon">🌐</span>
+                                <span>언어 선택 (Languages)</span>
+                            </button>
+                            <button type="button" class="kiosk-util-chip">
+                                <span class="util-icon">♿</span>
+                                <span>도움 기능 (Accessibility)</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- --------------------------------------------------------
+                     화면 2: 매장 / 포장 식사 장소 선택
+                     -------------------------------------------------------- -->
+                <section class="kiosk-view" id="view-dining-option">
+                    <div class="view-section-header">
+                        <h2 class="section-korean-title">식사 장소 선택</h2>
+                        <p class="section-english-title">어디서 드시겠습니까?</p>
+                    </div>
+
+                    <div class="dining-options-grid">
+                        <div class="btn-relative-wrap">
+                            <div class="dining-card" id="btn-eat-in" data-option="eat-in">
+                                <div class="dining-card-icon">🍽️</div>
+                                <div class="dining-card-text">
+                                    <h3>매장에서 식사</h3>
+                                    <p>매장 트레이에 제공 (Eat-In)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-relative-wrap">
+                            <div class="dining-card" id="btn-take-out" data-option="take-out">
+                                <div class="dining-card-icon">🛍️</div>
+                                <div class="dining-card-text">
+                                    <h3>테이크 아웃 (포장)</h3>
+                                    <p>포장용 봉투에 제공 (Take-Out)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dining-bottom-help">
+                        💡 이번 미션은 <b>포장 주문</b>입니다. 오른쪽 <b>[테이크 아웃 (포장)]</b>을 눌러주세요.
+                    </div>
+                </section>
+
+                <!-- --------------------------------------------------------
+                     화면 3: 메뉴 주문 화면 (카테고리 + 메뉴 그리드 + 하단 장바구니)
+                     -------------------------------------------------------- -->
+                <section class="kiosk-view" id="view-menu">
+                    <div class="menu-top-header">
+                        <div class="header-brand">
+                            <span style="font-size:22px; color:var(--mcd-yellow)">M</span>
+                            <span id="menu-header-title">메뉴 선택</span>
+                        </div>
+                        <div class="order-type-badge" id="current-dining-badge">매장 식사</div>
+                    </div>
+
+                    <div class="menu-main-layout">
+                        <!-- 좌측 세로 카테고리 -->
+                        <aside class="menu-sidebar-cats" id="sidebar-categories">
+                            <!-- 동적 생성 -->
+                        </aside>
+
+                        <!-- 우측 상품 목록 그리드 -->
+                        <div class="menu-grid-content" id="menu-items-grid">
+                            <!-- 동적 생성 -->
+                        </div>
+                    </div>
+
+                    <!-- 하단 고정 장바구니 바 -->
+                    <div class="kiosk-bottom-cart-bar" id="kiosk-cart-bar">
+                        <div class="cart-mission-ready-badge" id="cart-mission-ready-badge">
+                            🎯 [8단계] 결제하기를 터치하세요! →
+                        </div>
+                        <div class="cart-summary-left">
+                            <div class="cart-icon-bubble">
+                                <span>🛒</span>
+                                <span class="cart-count-badge" id="cart-item-count">0</span>
+                            </div>
+                            <div class="cart-price-info">
+                                <span class="cart-label">총 주문금액</span>
+                                <span class="cart-total-price" id="cart-total-price">0원</span>
+                            </div>
+                        </div>
+
+                        <!-- 기사 속 정답 버튼: [주문내역 확인 후 결제하기] -->
+                        <div class="btn-relative-wrap">
+                            <button type="button" class="btn-checkout-action" id="btn-cart-checkout">
+                                <span>주문내역 확인 후 결제하기</span>
+                                <span>→</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- --------------------------------------------------------
+                     메뉴 상세 / 옵션 / 장바구니 담기 바텀 시트 모달
+                     -------------------------------------------------------- -->
+                <div class="kiosk-modal-overlay" id="modal-item-detail">
+                    <div class="kiosk-detail-sheet">
+                        <div class="modal-header-row">
+                            <div>
+                                <h3 class="modal-item-title" id="detail-modal-title">오레오 맥플러리</h3>
+                                <div class="modal-item-calories" id="detail-modal-calories">348 kcal</div>
+                            </div>
+                            <button type="button" class="btn-modal-close" id="btn-close-detail-modal">✕</button>
+                        </div>
+
+                        <div class="modal-image-box" id="detail-modal-icon">
+                            🍨
+                        </div>
+
+                        <div class="quantity-control-row">
+                            <span style="font-weight:700; font-size:15px;">수량</span>
+                            <div class="qty-btn-group">
+                                <button type="button" class="qty-btn" id="btn-qty-minus">-</button>
+                                <span class="qty-display" id="modal-qty-display">1</span>
+                                <button type="button" class="qty-btn" id="btn-qty-plus">+</button>
+                            </div>
+                        </div>
+
+                        <div class="modal-action-footer">
+                            <button type="button" class="btn-modal-cancel" id="btn-modal-cancel">취소</button>
+                            <div class="btn-relative-wrap" style="flex:2;">
+                                <button type="button" class="btn-modal-add" id="btn-modal-add-cart">
+                                    <span id="modal-add-price">3,300원</span> 장바구니 담기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- --------------------------------------------------------
+                     ① 단품 / 세트 선택 오버레이 (빅맥 터치 후 표시)
+                     -------------------------------------------------------- -->
+                <div class="kiosk-modal-overlay" id="modal-set-or-single">
+                    <div class="set-select-sheet">
+                        <div class="modal-mission-step-bar" id="modal-step-tag-set">
+                            🎯 [5/13단계] 세트로 주문하기
+                        </div>
+                        <div class="set-modal-header">
+                            <span class="set-modal-item-name">🍔 빅맥</span>
+                            <button type="button" class="btn-modal-close" id="btn-close-set-modal">✕</button>
+                        </div>
+                        <p class="set-modal-subtext">어떻게 주문하시겠어요?</p>
+                        <div class="set-option-cards">
+                            <!-- 단품 -->
+                            <div class="set-option-card single-card" id="btn-single-option">
+                                <div class="set-option-icon">🍔</div>
+                                <div class="set-option-label">단품</div>
+                                <div class="set-option-desc">버거만</div>
+                                <div class="set-option-price">5,500원</div>
+                            </div>
+                            <!-- 세트 -->
+                            <div class="set-option-card set-card btn-relative-wrap" id="btn-set-option">
+                                <div class="set-option-badge-rec">추천 🌟</div>
+                                <div class="set-option-icon">🍔🍟🥤</div>
+                                <div class="set-option-label">세트로 주문</div>
+                                <div class="set-option-desc">버거 + 감자튀김 + 음료</div>
+                                <div class="set-option-price">7,700원</div>
+                            </div>
+                        </div>
+                        <p class="set-modal-tip">💡 미션 목표는 <b>세트 주문</b>입니다!</p>
+                    </div>
+                </div>
+
+                <!-- --------------------------------------------------------
+                     ② 사이즈 선택 오버레이 (세트 선택 후 표시)
+                     -------------------------------------------------------- -->
+                <div class="kiosk-modal-overlay" id="modal-size-select">
+                    <div class="size-select-sheet">
+                        <div class="modal-mission-step-bar" id="modal-step-tag-size">
+                            🎯 [6/13단계] M사이즈 확인
+                        </div>
+                        <div class="set-modal-header">
+                            <span class="set-modal-item-name">빅맥 세트 – 사이즈 선택</span>
+                            <button type="button" class="btn-modal-close" id="btn-close-size-modal">✕</button>
+                        </div>
+                        <p class="set-modal-subtext">사이즈를 골라주세요</p>
+                        <div class="size-option-cards">
+                            <!-- M사이즈 (기본, 미션 타겟) -->
+                            <div class="size-option-card size-m-card btn-relative-wrap selected" id="btn-size-m">
+                                <div class="size-option-badge">기본 ✓</div>
+                                <div class="size-option-label">M사이즈</div>
+                                <div class="size-option-desc">감자(M) + 음료(M)</div>
+                                <div class="size-option-price">+0원</div>
+                            </div>
+                            <!-- L사이즈 (비활성화) -->
+                            <div class="size-option-card size-l-card disabled" id="btn-size-l">
+                                <div class="size-option-label">L사이즈</div>
+                                <div class="size-option-desc">감자(L) + 음료(L)</div>
+                                <div class="size-option-price">+600원</div>
+                                <div class="size-disabled-tag">준비중</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- --------------------------------------------------------
+                     ③ 음료 선택 오버레이 (사이즈 선택 후 표시)
+                     -------------------------------------------------------- -->
+                <div class="kiosk-modal-overlay" id="modal-drink-select">
+                    <div class="drink-select-sheet">
+                        <div class="modal-mission-step-bar" id="modal-step-tag-drink">
+                            🎯 [7/13단계] 음료 선택 후 담기
+                        </div>
+                        <div class="set-modal-header">
+                            <span class="set-modal-item-name">음료 선택 (M)</span>
+                            <button type="button" class="btn-modal-close" id="btn-close-drink-modal">✕</button>
+                        </div>
+                        <p class="set-modal-subtext">원하는 음료를 골라주세요</p>
+                        <div class="drink-option-list">
+                            <div class="drink-option-item selected" data-drink="cola" id="drink-cola">
+                                <span class="drink-icon">🥤</span>
+                                <div class="drink-info">
+                                    <div class="drink-name">코카-콜라 (M)</div>
+                                    <div class="drink-cal">143 kcal</div>
+                                </div>
+                                <span class="drink-check-mark">✓</span>
+                            </div>
+                            <div class="drink-option-item" data-drink="cola-zero" id="drink-cola-zero">
+                                <span class="drink-icon">🥤</span>
+                                <div class="drink-info">
+                                    <div class="drink-name">코카-콜라 제로 (M)</div>
+                                    <div class="drink-cal">0 kcal</div>
+                                </div>
+                                <span class="drink-check-mark" style="opacity:0">✓</span>
+                            </div>
+                            <div class="drink-option-item" data-drink="sprite" id="drink-sprite">
+                                <span class="drink-icon">🍋</span>
+                                <div class="drink-info">
+                                    <div class="drink-name">스프라이트 (M)</div>
+                                    <div class="drink-cal">104 kcal</div>
+                                </div>
+                                <span class="drink-check-mark" style="opacity:0">✓</span>
+                            </div>
+                        </div>
+                        <div class="btn-relative-wrap" style="padding: 0 16px 16px;">
+                            <button type="button" class="btn-modal-add" id="btn-drink-confirm">
+                                이 음료로 담기 🛒
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- --------------------------------------------------------
+                     화면 4: 주문 내역 최종 확인 화면
+                     -------------------------------------------------------- -->
+                <section class="kiosk-view" id="view-order-review">
+                    <div class="view-section-header">
+                        <h2 class="section-korean-title">주문 내역 확인</h2>
+                        <p class="section-english-title">주문 메뉴를 확인해 주세요</p>
+                    </div>
+
+                    <div class="review-card-list" id="review-items-list">
+                        <!-- 동적 생성 -->
+                    </div>
+
+                    <div class="review-total-box">
+                        <div class="review-total-row">
+                            <span>총 결제금액</span>
+                            <span style="color:var(--mcd-red)" id="review-total-amount">7,700원</span>
+                        </div>
+                    </div>
+
+                    <div class="review-actions-row">
+                        <button type="button" class="btn-review-back" id="btn-review-add-more">
+                            ← 메뉴 추가
+                        </button>
+                        <div class="btn-relative-wrap" style="flex:2;">
+                            <button type="button" class="btn-review-confirm" id="btn-order-confirm">
+                                주문 완료 (결제) →
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- --------------------------------------------------------
+                     화면 5: 결제 방식 선택
+                     -------------------------------------------------------- -->
+                <section class="kiosk-view" id="view-payment-method">
+                    <div class="view-section-header">
+                        <h2 class="section-korean-title">결제 수단 선택</h2>
+                        <p class="section-english-title">결제 방법을 터치하세요</p>
+                    </div>
+
+                    <div class="payment-methods-grid">
+                        <div class="btn-relative-wrap">
+                            <div class="pay-method-btn" id="btn-pay-card" data-method="card">
+                                <div class="pay-method-icon">💳</div>
+                                <div>
+                                    <h3 class="pay-method-title">신용 / 체크카드</h3>
+                                    <p class="pay-method-desc">IC칩 카드를 아래 삽입구에 투입</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pay-method-btn" id="btn-pay-mobile" data-method="mobile">
+                            <div class="pay-method-icon">📱</div>
+                            <div>
+                                <h3 class="pay-method-title">모바일 쿠폰 / 바코드</h3>
+                                <p class="pay-method-desc">스캐너에 바코드 인식</p>
+                            </div>
+                        </div>
+
+                        <div class="pay-method-btn" id="btn-pay-simple" data-method="simple">
+                            <div class="pay-method-icon">🟡</div>
+                            <div>
+                                <h3 class="pay-method-title">간편결제 (카카오/네이버)</h3>
+                                <p class="pay-method-desc">QR코드 결제</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-review-back" id="btn-back-to-review" style="width:100%">
+                        ← 이전으로
+                    </button>
+                </section>
+
+                <!-- --------------------------------------------------------
+                     화면 6: 카드 결제 진행 및 투입구 안내
+                     -------------------------------------------------------- -->
+                <section class="kiosk-view" id="view-card-processing">
+                    <div class="card-instruction-box">
+                        <h2>카드를 투입구에 넣어주세요</h2>
+                        <p>키오스크 하단의 <b>IC 카드 삽입구</b>에<br>IC칩이 위로 향하게 카드를 넣어주세요.</p>
+                    </div>
+
+                    <div class="card-animation-stage">
+                        <div class="btn-relative-wrap">
+                            <div class="virtual-credit-card" id="virtual-card-touch" title="카드를 터치하면 투입구로 들어갑니다">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <div class="card-chip"></div>
+                                    <span style="font-size:11px; font-weight:700;">TEST CARD</span>
+                                </div>
+                                <div class="card-number-dots">•••• •••• •••• 5042</div>
+                                <div style="display:flex; justify-content:space-between; font-size:10px;">
+                                    <span>MC CARD</span>
+                                    <span>08/29</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-arrow-down">⬇️</div>
+
+                        <div class="card-status-text" id="card-processing-status">
+                            하단의 반짝이는 카드 삽입구를 터치하세요!
+                        </div>
+                    </div>
+                </section>
+
+                <!-- --------------------------------------------------------
+                     화면 7: 주문 성공 및 영수증 / 매장 모니터 화면
+                     -------------------------------------------------------- -->
+                <section class="kiosk-view" id="view-order-success">
+                    <div class="success-top-congrats">
+                        <div class="success-checkmark">🎉</div>
+                        <h2 class="success-title">주문 완료!</h2>
+                        <p style="font-size: 13.5px; color: #4b5563;">
+                            영수증의 주문번호를 확인해 주세요.
+                        </p>
+                    </div>
+
+                    <!-- 매장 대기 현황 전광판 시뮬레이션 -->
+                    <div class="store-board-mockup">
+                        <div class="board-header">매장 픽업 현황 모니터</div>
+                        <div class="board-columns">
+                            <div class="board-col preparing">
+                                <h4>준비 중 (Preparing)</h4>
+                                <div class="board-numbers">
+                                    <span>501</span>
+                                    <span class="my-order-number-glow" id="board-my-num-prep">502 (내 번호)</span>
+                                </div>
+                            </div>
+                            <div class="board-col serving">
+                                <h4>나오는 중 (Serving)</h4>
+                                <div class="board-numbers">
+                                    <span>498</span>
+                                    <span>500</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 가상 영수증 카드 -->
+                    <div class="receipt-paper-card" id="receipt-card-view">
+                        <div class="receipt-header-txt">맥도날드 영수증 (RECEIPT)</div>
+                        <div style="text-align:center; font-size:11px; color:#6b7280;">주문번호</div>
+                        <div class="receipt-num-big" id="receipt-order-no">502</div>
+                        <div style="border-bottom:1px dashed #ddd; margin:4px 0;"></div>
+                        <div style="display:flex; justify-content:space-between;" id="receipt-summary-item">
+                            <span>빅맥 세트 (M, 콜라) x 1</span>
+                            <span>7,700원</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-top:4px; font-weight:800;">
+                            <span>결제완료 (신용카드)</span>
+                            <span id="receipt-summary-price">7,700원</span>
+                        </div>
+                    </div>
+
+                    <div class="success-actions">
+                        <button type="button" class="btn-mcd-primary-large" id="btn-restart-mission" style="padding:14px; font-size:18px;">
+                            🔄 처음으로 돌아가기 (모드 선택)
+                        </button>
+                    </div>
+                </section>
+
+                <!-- --------------------------------------------------------
+                     🚨 [핵심 인터랙션] 꽂힌 카드 직접 클릭 안내 레이어
+                     버튼으로 챙기지 않고 하단 카드를 직접 클릭하도록 유도!
+                     -------------------------------------------------------- -->
+                <div class="card-take-warning-modal" id="modal-card-take-warning">
+                    <div class="warning-dialog-card">
+                        <div class="warning-icon-badge">🚨💳</div>
+                        <h3 class="warning-dialog-title">결제 완료! 카드를 꼭 챙기세요!</h3>
+                        <p class="warning-dialog-desc">
+                            키오스크 아래에 <b>꽂혀있는 카드를 직접 터치</b>해서 쏙 뽑아주세요!
+                        </p>
+                        <div class="arrow-pointing-hardware">
+                            <span>⬇️ 아래 꽂힌 카드를 직접 터치하세요 ⬇️</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ========================================================
+                 실물 키오스크 하드웨어 모듈 (카드 투입구, 영수증 슬롯)
+                 ======================================================== -->
+            <div class="kiosk-hardware-bottom">
+                <div class="hardware-row">
+                    <!-- IC 카드 삽입구 모듈 -->
+                    <div class="btn-relative-wrap" style="flex:1;">
+                        <div class="card-reader-module" id="kiosk-card-slot" title="신용카드를 넣는 곳입니다">
+                            <div class="reader-label">
+                                <span class="reader-led" id="card-reader-led"></span>
+                                <span>IC CARD 삽입구</span>
+                            </div>
+                            <div class="card-slot-hole"></div>
+
+                            <!-- [문제 해결 3] 꽂힌 카드: 사용자가 직접 클릭해서 뽑는 인터랙션 -->
+                            <div class="inserted-card-tail" id="inserted-card-visual" title="카드를 직접 터치해서 뽑으세요!">
+                                <span>💳 꽂힌 카드 (터치하여 뽑기)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 영수증 출력구 모듈 -->
+                    <div class="receipt-printer-module" id="receipt-printer-slot">
+                        <div class="reader-label">
+                            <span>영수증 출력구</span>
+                        </div>
+                        <div class="receipt-slot-hole"></div>
+                        <div class="ejected-paper" id="ejected-paper-visual">
+                            <div>맥도날드</div>
+                            <div>[영수증]</div>
+                            <div style="font-weight:800; color:red" id="ejected-order-num">No.502</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- 스크립트 로드 순서: audio.js -> data.js -> app.js -->
+    <script src="audio.js?v=20261111_04"></script>
+    <script src="data.js?v=20261111_04"></script>
+    <script src="app.js?v=20261111_04"></script>
+</body>
+</html>

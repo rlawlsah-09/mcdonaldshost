@@ -1,0 +1,2310 @@
+/* ========================================================
+   맥도날드 키오스크 연습 서비스 스타일시트
+   (패드/모바일 세로 풀스크린 핏 + 인라인 유도 배지 + 초간결화)
+   ======================================================== */
+
+:root {
+    --mcd-red: #DA291C;
+    --mcd-yellow: #FFBC0D;
+    --mcd-dark: #27251F;
+    --mcd-gray-bg: #F4F4F4;
+    --mcd-gray-light: #EBEBEB;
+    --mcd-gray-border: #D1D5DB;
+    --mcd-text-muted: #6B7280;
+    
+    /* 🌟 초강력 밝은 네온 유도등 컬러 */
+    --neon-yellow: #FFE600;
+    --neon-glow: rgba(255, 230, 0, 0.95);
+    --neon-orange: #FF7700;
+
+    --kiosk-width: 480px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* 패드 및 모바일에서 상하 스크롤 없이 꽉 참 */
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "SUIT", "Noto Sans KR", Roboto, sans-serif;
+    background: #141417;
+    background-image: radial-gradient(circle at 50% 15%, #23242b 0%, #0d0d10 100%);
+    color: var(--mcd-dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 10px;
+}
+
+/* ========================================================
+   ✨ [첫 진입 화면] 웰컴 모드 선택 오버레이
+   ======================================================== */
+.welcome-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(8, 8, 12, 0.92);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeInModal 0.25s ease-out;
+}
+
+.welcome-overlay.active {
+    display: flex;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.welcome-modal-box {
+    background: #1e1f24;
+    border: 2px solid #3e3f4a;
+    border-radius: 24px;
+    padding: 28px 24px 20px;
+    max-width: 520px;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+    animation: scaleUpModal 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleUpModal {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.welcome-mcd-logo {
+    width: 52px;
+    height: 52px;
+    background: var(--mcd-red);
+    color: var(--mcd-yellow);
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    margin: 0 auto 12px;
+    box-shadow: 0 4px 15px rgba(218, 41, 28, 0.5);
+}
+
+.welcome-title {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+}
+
+.welcome-subtitle {
+    font-size: 14px;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+.welcome-mode-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 480px) {
+    .welcome-mode-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+.welcome-card {
+    background: #272830;
+    border: 2px solid #3f404d;
+    border-radius: 18px;
+    padding: 20px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.welcome-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--neon-yellow);
+    box-shadow: 0 10px 25px rgba(255, 230, 0, 0.25);
+}
+
+.welcome-card.mission-card {
+    border-color: #f59e0b;
+}
+
+.welcome-card-badge {
+    position: absolute;
+    top: -9px;
+    background: #f59e0b;
+    color: #111;
+    font-size: 11px;
+    font-weight: 900;
+    padding: 2px 9px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.welcome-card-badge.free-badge {
+    background: #3b82f6;
+    color: #fff;
+}
+
+.welcome-card-icon {
+    font-size: 38px;
+    margin: 6px 0 8px;
+}
+
+.welcome-card-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    color: #fff;
+}
+
+.welcome-card-desc {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.4;
+    margin-bottom: 14px;
+    flex: 1;
+}
+
+.welcome-card-desc b {
+    color: #f8fafc;
+}
+
+.welcome-start-btn {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.welcome-start-btn.mission-start {
+    background: var(--mcd-yellow);
+    color: var(--mcd-dark);
+}
+
+.welcome-start-btn.free-start {
+    background: #3b82f6;
+    color: #fff;
+}
+
+.welcome-footer-tip {
+    font-size: 11.5px;
+    color: #64748b;
+}
+
+/* ========================================================
+   🎯 [미션 시작 목표 카드]
+   ======================================================== */
+.mission-intro-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(10, 10, 14, 0.85);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeInModal 0.25s ease-out;
+}
+
+.mission-intro-overlay.active {
+    display: flex;
+}
+
+.mission-intro-box {
+    background: #1f2026;
+    border: 3px solid var(--neon-yellow);
+    border-radius: 24px;
+    padding: 26px 22px 22px;
+    max-width: 440px;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(255, 230, 0, 0.35);
+    animation: scaleUpModal 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.mission-intro-badge {
+    display: inline-block;
+    background: var(--neon-yellow);
+    color: #111;
+    font-size: 13px;
+    font-weight: 900;
+    padding: 4px 14px;
+    border-radius: 16px;
+    margin-bottom: 12px;
+}
+
+.mission-intro-icon {
+    font-size: 50px;
+    margin-bottom: 8px;
+}
+
+.mission-intro-title {
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 14px;
+    color: #fff;
+}
+
+.mission-intro-checklist {
+    background: #2a2b34;
+    border-radius: 14px;
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #e2e8f0;
+    margin-bottom: 14px;
+}
+
+.mission-intro-sub {
+    font-size: 13px;
+    color: #cbd5e1;
+    margin-bottom: 18px;
+}
+
+.mission-intro-sub b {
+    color: var(--neon-yellow);
+}
+
+/* ========================================================
+   상단 연습 도우미 컨트롤 바 (컴팩트 & 텍스트 초간결화)
+   ======================================================== */
+.practice-top-bar {
+    width: 100%;
+    max-width: 600px;
+    background: #1c1c20;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 6px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    color: #fff;
+    flex-shrink: 0;
+    z-index: 1000;
+}
+
+.top-bar-row-1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.practice-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mcd-logo-badge {
+    background: var(--mcd-red);
+    color: var(--mcd-yellow);
+    font-weight: 900;
+    font-size: 16px;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.practice-title {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.practice-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mode-select-opener-btn {
+    background: #2a2b34;
+    border: 1px solid #4a4b59;
+    border-radius: 14px;
+    padding: 4px 10px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.change-tag-btn {
+    color: var(--mcd-yellow);
+    font-size: 11px;
+}
+
+.guide-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 800;
+    background: rgba(255, 230, 0, 0.12);
+    border: 1px solid rgba(255, 230, 0, 0.35);
+    padding: 3px 8px;
+    border-radius: 14px;
+    color: var(--neon-yellow);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 16px;
+}
+
+.switch input { opacity: 0; width: 0; height: 0; }
+
+.slider {
+    position: absolute; cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #555;
+    transition: .2s;
+    border-radius: 16px;
+}
+
+.slider:before {
+    position: absolute; content: "";
+    height: 12px; width: 12px;
+    left: 2px; bottom: 2px;
+    background-color: white;
+    transition: .2s;
+    border-radius: 50%;
+}
+
+input:checked + .slider { background-color: var(--neon-yellow); }
+input:checked + .slider:before { transform: translateX(14px); background-color: var(--mcd-dark); }
+
+.icon-control-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.icon-control-btn.reset-btn {
+    background: #ef4444;
+    color: #fff;
+}
+
+/* 초간결 미션 가이드 바 */
+.mission-status-bar {
+    background: #0f0f13;
+    border-left: 4px solid var(--neon-yellow);
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.mission-status-bar.step-flash {
+    animation: statusStepFlash 0.6s ease-out;
+}
+
+@keyframes statusStepFlash {
+    0% {
+        background: #352f10;
+        box-shadow: 0 0 18px rgba(255, 230, 0, 0.8);
+        transform: scale(1.015);
+    }
+    100% {
+        background: #0f0f13;
+        box-shadow: none;
+        transform: scale(1);
+    }
+}
+
+.mission-step-indicator {
+    background: var(--neon-yellow);
+    color: #111;
+    font-weight: 900;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    box-shadow: 0 0 8px rgba(255, 230, 0, 0.5);
+    white-space: nowrap;
+}
+
+.mission-guide-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: #f1f5f9;
+    flex-wrap: wrap;
+}
+
+.mission-guide-title {
+    color: var(--neon-yellow);
+    font-size: 14px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.mission-guide-sep {
+    color: #666;
+    font-weight: 400;
+}
+
+.mission-guide-text {
+    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 800;
+}
+
+.mission-wrong-warning {
+    color: #ff6b6b !important;
+    font-size: 12px;
+    font-weight: 700;
+    display: none;
+}
+
+/* ========================================================
+   토스트 안내 메시지 (빠르게 나타나고 신속하게 사라짐)
+   ======================================================== */
+.kiosk-toast {
+    position: fixed;
+    bottom: 85px;
+    left: 50%;
+    transform: translateX(-50%) translateY(15px);
+    background: #18181b;
+    border: 2px solid var(--neon-yellow);
+    color: #fff;
+    padding: 9px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease-out, transform 0.18s ease-out;
+    max-width: 90%;
+    cursor: pointer;
+}
+
+.kiosk-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+/* ========================================================
+   📱 패드 / 스마트폰 화면 꽉 찬 반응형 키오스크 핏
+   ======================================================== */
+.kiosk-device-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: var(--kiosk-width);
+    flex: 1;
+    min-height: 0; /* flex 자식 축소 허용 */
+}
+
+.kiosk-kiosk-body {
+    width: 100%;
+    height: 100%;
+    background: #1e1e22;
+    border: 2px solid #3d3e47;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* 상단 베젤 */
+.kiosk-top-bezel {
+    height: 24px;
+    background: #151518;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-bottom: 1px solid #2d2e35;
+    flex-shrink: 0;
+}
+
+.kiosk-speaker-grill {
+    width: 44px;
+    height: 4px;
+    background: #09090b;
+    border-radius: 2px;
+}
+
+.kiosk-camera {
+    width: 6px;
+    height: 6px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 50%;
+    position: absolute;
+    left: 18px;
+}
+
+/* ========================================================
+   키오스크 화면 디스플레이 영역 (터치스크린)
+   ======================================================== */
+.kiosk-screen {
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.kiosk-view {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #fff;
+    display: none !important;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.kiosk-view.active {
+    display: flex !important;
+    z-index: 20;
+}
+
+/* --------------------------------------------------------
+   화면 1: 대기 광고 화면 (실제 맥도날드 키오스크 시작 화면 100% 재현)
+   -------------------------------------------------------- */
+#view-start {
+    background: #0f0717;
+    color: #fff;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+/* 최상단 프로모션 띠 */
+.mcd-kiosk-top-strip {
+    background: linear-gradient(90deg, #ff9900 0%, #ff5500 50%, #e63900 100%);
+    padding: 6px 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.top-strip-text {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #fff;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.strip-badge {
+    background: #fff;
+    color: #d62828;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+.strip-highlight {
+    color: #ffe600;
+    font-weight: 900;
+    font-size: 11.5px;
+}
+
+.strip-sub {
+    font-size: 9.5px;
+    color: #ffcccc;
+    opacity: 0.9;
+}
+
+/* 중앙 포스터 영역 (피자 버거 광고 - 사진과 동일한 상단 네온 & 하단 옐로우 배경) */
+.start-kiosk-ad-poster {
+    flex: 1;
+    background: linear-gradient(180deg, #1e0d38 0%, #2e1065 30%, #3b0764 45%, #eab308 72%, #facc15 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px 4px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* 네온사인 PIZZA */
+.poster-neon-pizza {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+.neon-pizza-slice {
+    font-size: 26px;
+    filter: drop-shadow(0 0 8px #f59e0b);
+    animation: pulseSlice 2s ease-in-out infinite alternate;
+}
+
+@keyframes pulseSlice {
+    0% { transform: scale(0.96) rotate(-5deg); }
+    100% { transform: scale(1.05) rotate(5deg); }
+}
+
+.neon-pizza-text {
+    font-size: 28px;
+    font-weight: 900;
+    font-family: 'Arial Black', Impact, sans-serif;
+    letter-spacing: 3px;
+    color: #38bdf8;
+    text-shadow: 0 0 6px #38bdf8, 0 0 14px #0284c7, 0 0 24px #0369a1;
+}
+
+/* 버거 헤더 텍스트 */
+.poster-burgers-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 4px;
+    z-index: 2;
+}
+
+.poster-burger-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.poster-burger-item-info.left {
+    text-align: left;
+}
+
+.poster-burger-item-info.right {
+    text-align: right;
+}
+
+.badge-new-item {
+    display: inline-block;
+    align-self: flex-start;
+    background: #ff5722;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    padding: 1px 5px;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    box-shadow: 0 0 6px rgba(255, 87, 34, 0.7);
+}
+
+.poster-burger-item-info.right .badge-new-item {
+    align-self: flex-end;
+}
+
+.burger-name-kr {
+    font-size: 13.5px;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.burger-name-en {
+    font-size: 9.5px;
+    color: #cbd5e1;
+    font-weight: 600;
+    margin-top: 1px;
+}
+
+/* 버거 실물 비주얼 그래픽 듀오 */
+.poster-burgers-visual {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    padding: 6px 0;
+    min-height: 120px;
+}
+
+.visual-burger-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.7));
+    transition: transform 0.25s ease;
+}
+
+.start-kiosk-ad-poster:hover .visual-burger-card {
+    transform: scale(1.03);
+}
+
+/* 수제 햄버거 레이어 그래픽 */
+.burger-bun-top {
+    width: 110px;
+    height: 40px;
+    background: radial-gradient(circle at 50% 20%, #fcd34d 0%, #d97706 60%, #92400e 100%);
+    border-radius: 60px 60px 10px 10px;
+    position: relative;
+    box-shadow: inset 0 -3px 4px rgba(0,0,0,0.25);
+}
+
+.burger-bun-top.mega {
+    width: 125px;
+    height: 44px;
+}
+
+.sesame {
+    position: absolute;
+    width: 3.5px;
+    height: 5.5px;
+    background: #fef3c7;
+    border-radius: 50%;
+    transform: rotate(25deg);
+}
+
+.sesame.s1 { top: 12px; left: 30px; transform: rotate(-20deg); }
+.sesame.s2 { top: 8px; left: 55px; transform: rotate(10deg); }
+.sesame.s3 { top: 14px; right: 30px; transform: rotate(30deg); }
+
+.burger-layer-lettuce {
+    width: 120px;
+    height: 12px;
+    background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
+    border-radius: 12px;
+    margin-top: -3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 3;
+}
+
+.burger-layer-lettuce.mega { width: 135px; }
+
+.burger-layer-tomato {
+    width: 105px;
+    height: 9px;
+    background: #ef4444;
+    border-radius: 6px;
+    margin-top: -2px;
+    z-index: 2;
+}
+
+.burger-layer-tomato.mega { width: 118px; }
+
+.burger-layer-pepperoni {
+    width: 95px;
+    height: 7px;
+    background: #b91c1c;
+    border-radius: 4px;
+    margin-top: -1px;
+    border: 1px dashed #f87171;
+    z-index: 2;
+}
+
+.burger-layer-pepperoni.mega { width: 108px; }
+
+.burger-layer-patty {
+    width: 112px;
+    height: 14px;
+    background: linear-gradient(180deg, #78350f 0%, #451a03 100%);
+    border-radius: 7px;
+    margin-top: -2px;
+    box-shadow: inset 0 2px 2px rgba(255,255,255,0.15);
+    z-index: 2;
+}
+
+.burger-layer-patty.mega { width: 124px; height: 16px; }
+
+.burger-layer-cheese {
+    width: 116px;
+    height: 8px;
+    background: #fbbf24;
+    clip-path: polygon(0% 0%, 100% 0%, 95% 100%, 75% 70%, 50% 100%, 25% 65%, 5% 100%);
+    margin-top: -3px;
+    z-index: 3;
+}
+
+.burger-layer-cheese.mega { width: 128px; height: 10px; }
+
+.burger-bun-bottom {
+    width: 108px;
+    height: 22px;
+    background: linear-gradient(180deg, #d97706 0%, #b45309 80%, #78350f 100%);
+    border-radius: 6px 6px 30px 30px;
+    margin-top: -2px;
+}
+
+.burger-bun-bottom.mega { width: 120px; height: 24px; }
+
+/* 터치 안내 문구 */
+.poster-tap-hint {
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 10.5px;
+    color: #fef08a;
+    margin-top: 4px;
+    z-index: 2;
+}
+
+/* 중단 노란색 안내문 박스 (사진과 동일) */
+.start-kiosk-notice-box {
+    background: #ffe600;
+    color: #1a1a1a;
+    padding: 6px 12px;
+    flex-shrink: 0;
+    border-top: 1px solid #ffd000;
+    border-bottom: 1px solid #e6b800;
+}
+
+.notice-line {
+    font-size: 9.8px;
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: -0.3px;
+}
+
+.notice-line.muted {
+    font-size: 9px;
+    color: #555;
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* 하단 실제 맥도날드 키오스크 시작 패널 */
+.start-kiosk-bottom-panel {
+    background: #fffdf0;
+    padding: 10px 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+    border-top: 1px solid #ffd000;
+}
+
+.bottom-main-action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 10px;
+    align-items: stretch;
+}
+
+/* 좌측: 포인트 적립 박스 */
+.point-earn-box {
+    background: #ffffff;
+    border: 1.5px solid #d1d5db;
+    border-radius: 12px;
+    padding: 8px 6px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    color: #1f2937;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.point-earn-header {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+.point-title {
+    font-size: 11.5px;
+    font-weight: 900;
+    color: #111827;
+    letter-spacing: -0.3px;
+}
+
+.point-subtitle {
+    font-size: 9.5px;
+    color: #6b7280;
+    font-weight: 700;
+}
+
+.point-qr-code-icon {
+    color: #111827;
+    margin: 4px 0 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.point-arrow-down {
+    font-size: 12px;
+    color: #9ca3af;
+    font-weight: 900;
+    line-height: 1;
+}
+
+/* 우측: [주문하기 (Start Order)] 버튼 (사진 속 빨간 테두리 부분) */
+.real-kiosk-order-btn {
+    width: 100%;
+    height: 100%;
+    min-height: 105px;
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.real-kiosk-order-btn:hover {
+    border-color: #94a3b8;
+    background: #f8fafc;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.real-kiosk-order-btn:active {
+    transform: scale(0.97);
+    background: #f1f5f9;
+}
+
+.real-kiosk-order-btn .order-btn-kr {
+    font-size: 24px;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    margin-bottom: 2px;
+}
+
+.real-kiosk-order-btn .order-btn-en {
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748b;
+}
+
+/* 최하단 유틸리티 링크 바 */
+.kiosk-accessibility-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 4px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.kiosk-util-chip {
+    flex: 1;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 4px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.kiosk-util-chip:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+/* --------------------------------------------------------
+   화면 2: 매장 / 포장 식사 장소 선택
+   -------------------------------------------------------- */
+#view-dining-option {
+    background: #f8fafc;
+    justify-content: space-between;
+    padding: 20px 16px;
+}
+
+.view-section-header {
+    text-align: center;
+    margin-top: 10px;
+    flex-shrink: 0;
+}
+
+.section-korean-title {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--mcd-dark);
+    margin-bottom: 4px;
+}
+
+.section-english-title {
+    font-size: 13px;
+    color: var(--mcd-text-muted);
+}
+
+.dining-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    flex: 1;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.dining-options-grid .btn-relative-wrap {
+    height: 100%;
+    display: flex;
+}
+
+.dining-card {
+    background: #fff;
+    border: 3px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 28px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 16px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dining-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+    border-color: var(--mcd-red);
+}
+
+.dining-card:active {
+    transform: scale(0.97);
+    border-color: var(--mcd-red);
+}
+
+.dining-card-icon {
+    font-size: 54px;
+    background: #fff5f5;
+    width: 92px;
+    height: 92px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.dining-card-text h3 {
+    font-size: 20px;
+    font-weight: 900;
+    color: #1e293b;
+    margin-bottom: 6px;
+    line-height: 1.2;
+}
+
+.dining-card-text p {
+    font-size: 13px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.dining-bottom-help {
+    text-align: center;
+    color: #334155;
+    font-size: 13px;
+    background: #f1f5f9;
+    padding: 10px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    border: 1px solid #e2e8f0;
+}
+
+/* --------------------------------------------------------
+   화면 3: 메뉴 주문 화면
+   -------------------------------------------------------- */
+#view-menu {
+    background: #fff;
+}
+
+.menu-top-header {
+    height: 48px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    flex-shrink: 0;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 800;
+    color: var(--mcd-red);
+    font-size: 16px;
+}
+
+.order-type-badge {
+    background: #f3f4f6;
+    color: #4b5563;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.menu-main-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+}
+
+.menu-sidebar-cats {
+    width: 95px;
+    background: #f9fafb;
+    border-right: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.cat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 4px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    text-align: center;
+    gap: 3px;
+    position: relative;
+}
+
+.cat-item.active {
+    background: #fff;
+    border-left: 4px solid var(--mcd-red);
+    font-weight: 900;
+    color: var(--mcd-red);
+}
+
+.cat-icon { font-size: 22px; }
+.cat-name { font-size: 11.5px; line-height: 1.2; }
+
+.menu-grid-content {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background: #fff;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: max-content;
+    gap: 10px;
+}
+
+.menu-card {
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    position: relative;
+}
+
+.menu-card:active {
+    border-color: var(--mcd-yellow);
+}
+
+.card-badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: var(--mcd-red);
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 4px;
+    z-index: 2;
+}
+
+.menu-card-img-wrap {
+    width: 100%;
+    height: 75px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+    font-size: 42px;
+}
+
+.menu-card-title {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--mcd-dark);
+    line-height: 1.3;
+    margin-bottom: 2px;
+    min-height: 32px;
+}
+
+.menu-card-calorie {
+    font-size: 10.5px;
+    color: var(--mcd-text-muted);
+    margin-bottom: 4px;
+}
+
+.menu-card-price {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--mcd-red);
+    margin-top: auto;
+}
+
+/* 하단 장바구니 바 */
+.kiosk-bottom-cart-bar {
+    height: 68px;
+    background: #23221e;
+    color: #fff;
+    border-top: 3px solid var(--mcd-yellow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    flex-shrink: 0;
+    z-index: 20;
+}
+
+.cart-summary-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cart-icon-bubble {
+    width: 38px;
+    height: 38px;
+    background: #383733;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    position: relative;
+}
+
+.cart-count-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--mcd-red);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-label { font-size: 10px; color: #9ca3af; }
+.cart-total-price { font-size: 16px; font-weight: 800; color: var(--mcd-yellow); }
+
+.btn-checkout-action {
+    background: var(--mcd-yellow);
+    color: var(--mcd-dark);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* --------------------------------------------------------
+   모달 바텀 시트
+   -------------------------------------------------------- */
+.kiosk-modal-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    display: none;
+    align-items: flex-end;
+    z-index: 50;
+}
+
+.kiosk-modal-overlay.active { display: flex; }
+
+.kiosk-detail-sheet {
+    width: 100%;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 18px 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 85%;
+    overflow-y: auto;
+}
+
+.modal-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.modal-item-title { font-size: 18px; font-weight: 800; }
+.modal-item-calories { font-size: 12px; color: #6b7280; }
+.btn-modal-close {
+    background: #f3f4f6;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.modal-image-box {
+    width: 100%;
+    height: 110px;
+    background: #f8fafc;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+}
+
+.quantity-control-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.qty-btn-group { display: flex; align-items: center; gap: 12px; }
+.qty-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.qty-display { font-size: 16px; font-weight: 800; min-width: 18px; text-align: center; }
+
+.modal-action-footer { display: flex; gap: 8px; }
+.btn-modal-cancel {
+    flex: 1;
+    background: #f3f4f6;
+    color: #4b5563;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.btn-modal-add {
+    width: 100%;
+    background: var(--mcd-yellow);
+    color: var(--mcd-dark);
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+/* --------------------------------------------------------
+   화면 4: 주문 내역 확인 화면
+   -------------------------------------------------------- */
+#view-order-review {
+    background: #f8fafc;
+    justify-content: space-between;
+    padding: 16px;
+}
+
+.review-card-list {
+    flex: 1;
+    overflow-y: auto;
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.review-item-row {
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.review-item-info { display: flex; align-items: center; gap: 10px; }
+.review-item-emoji { font-size: 26px; }
+.review-item-name { font-size: 14px; font-weight: 800; }
+.review-item-calc { font-size: 12px; color: #6b7280; }
+
+.review-total-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1.5px solid #e5e7eb;
+    margin-bottom: 12px;
+}
+
+.review-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.review-actions-row { display: flex; gap: 10px; }
+.btn-review-back {
+    flex: 1;
+    background: #f1f5f9;
+    color: #475569;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.btn-review-confirm {
+    width: 100%;
+    background: var(--mcd-red);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+/* --------------------------------------------------------
+   화면 5: 결제 수단 선택
+   -------------------------------------------------------- */
+#view-payment-method {
+    background: #f8fafc;
+    justify-content: space-between;
+    padding: 20px 16px;
+}
+
+.payment-methods-grid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    margin: 14px 0;
+}
+
+.pay-method-btn {
+    background: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+}
+
+.pay-method-icon {
+    font-size: 30px;
+    width: 50px;
+    height: 50px;
+    background: #fef2f2;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pay-method-title { font-size: 16px; font-weight: 800; margin-bottom: 2px; }
+.pay-method-desc { font-size: 11.5px; color: #6b7280; }
+
+/* --------------------------------------------------------
+   화면 6: 카드 결제 진행 및 투입구 안내
+   -------------------------------------------------------- */
+#view-card-processing {
+    background: #fff;
+    justify-content: space-between;
+    padding: 24px 16px;
+    text-align: center;
+}
+
+.card-instruction-box h2 { font-size: 21px; font-weight: 900; margin-bottom: 6px; }
+.card-instruction-box p { font-size: 13.5px; color: var(--mcd-text-muted); line-height: 1.4; }
+
+.card-animation-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+.virtual-credit-card {
+    width: 190px;
+    height: 115px;
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    border-radius: 12px;
+    padding: 12px;
+    color: #fff;
+    box-shadow: 0 10px 25px rgba(30, 58, 138, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.card-chip {
+    width: 28px;
+    height: 20px;
+    background: #fcd34d;
+    border-radius: 4px;
+    border: 1px solid #b45309;
+}
+
+.card-number-dots { font-family: monospace; font-size: 12px; letter-spacing: 2px; }
+.card-arrow-down { font-size: 28px; animation: bounceDown 1.5s infinite; }
+
+@keyframes bounceDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+}
+
+.card-status-text { font-size: 14px; font-weight: 800; color: var(--mcd-red); }
+
+/* --------------------------------------------------------
+   화면 7: 주문 완료, 영수증, 번호표 화면
+   -------------------------------------------------------- */
+#view-order-success {
+    background: #f8fafc;
+    justify-content: space-between;
+    padding: 18px 16px;
+    overflow-y: auto;
+}
+
+.success-top-congrats { text-align: center; }
+.success-checkmark { font-size: 40px; margin-bottom: 2px; }
+.success-title { font-size: 22px; font-weight: 900; }
+
+.store-board-mockup {
+    background: #111827;
+    border-radius: 12px;
+    padding: 10px 12px;
+    color: #fff;
+    margin: 10px 0;
+}
+
+.board-header { font-size: 11px; color: #9ca3af; text-align: center; margin-bottom: 6px; }
+.board-columns { display: flex; gap: 8px; }
+.board-col { flex: 1; background: #1f2937; border-radius: 8px; padding: 6px; text-align: center; }
+.board-col.preparing h4 { color: #f59e0b; font-size: 11px; margin-bottom: 4px; }
+.board-col.serving h4 { color: #22c55e; font-size: 11px; margin-bottom: 4px; }
+.board-numbers { font-size: 15px; font-weight: 800; display: flex; flex-direction: column; gap: 2px; }
+.my-order-number-glow { color: var(--mcd-yellow); }
+
+.receipt-paper-card {
+    background: #fff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    padding: 12px;
+    font-family: monospace;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.receipt-header-txt { text-align: center; font-weight: 800; font-size: 13px; margin-bottom: 4px; }
+.receipt-num-big { font-size: 24px; font-weight: 900; color: var(--mcd-red); text-align: center; margin: 2px 0; }
+.success-actions { margin-top: 10px; }
+
+/* --------------------------------------------------------
+   🚨 [문제 해결 3] 꽂힌 카드 직접 클릭 안내 레이어
+   -------------------------------------------------------- */
+.card-take-warning-modal {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.card-take-warning-modal.active { display: flex; }
+
+.warning-dialog-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 20px 16px;
+    text-align: center;
+    border: 3px solid var(--mcd-red);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    max-width: 340px;
+    animation: popWarning 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popWarning {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.warning-icon-badge { font-size: 40px; margin-bottom: 6px; }
+.warning-dialog-title { font-size: 19px; font-weight: 900; color: var(--mcd-red); margin-bottom: 6px; }
+.warning-dialog-desc { font-size: 13.5px; color: #374151; line-height: 1.4; margin-bottom: 12px; }
+
+.arrow-pointing-hardware {
+    background: #fef2f2;
+    border: 2px dashed var(--mcd-red);
+    border-radius: 10px;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--mcd-red);
+    animation: bounceDown 1s infinite alternate;
+}
+
+/* ========================================================
+   실물 하드웨어 하단 모듈 (카드 투입구, 영수증 슬롯)
+   ======================================================== */
+.kiosk-hardware-bottom {
+    background: linear-gradient(180deg, #1b1b1f 0%, #121215 100%);
+    border-top: 2px solid #2f2f37;
+    padding: 10px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.hardware-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.card-reader-module {
+    background: #24242a;
+    border: 2px solid #3c3c46;
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    width: 100%;
+}
+
+.reader-label {
+    font-size: 10px;
+    color: #aaa;
+    font-weight: 800;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.reader-led {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #444;
+}
+
+.reader-led.active {
+    background: #22c55e;
+    box-shadow: 0 0 10px #22c55e;
+    animation: blinkLed 0.8s infinite alternate;
+}
+
+@keyframes blinkLed { from { opacity: 0.3; } to { opacity: 1; } }
+
+.card-slot-hole {
+    width: 120px;
+    height: 8px;
+    background: #09090b;
+    border-radius: 3px;
+    position: relative;
+}
+
+/* [문제 해결 3] 꽂힌 카드 직접 클릭 스타일 */
+.inserted-card-tail {
+    position: absolute;
+    bottom: 4px;
+    width: 90px;
+    height: 48px;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    border-radius: 8px 8px 0 0;
+    border: 2px solid #60a5fa;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.5);
+    z-index: 30;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.inserted-card-tail.visible {
+    display: flex;
+    animation: insertCardAnim 0.35s ease-out;
+}
+
+/* 꽂힌 카드를 직접 뽑아야 할 때 환하게 번쩍이는 네온 효과 */
+.inserted-card-tail.must-take {
+    outline: 4px solid var(--neon-yellow);
+    box-shadow: 0 0 20px var(--neon-glow), 0 0 35px #ff7700 !important;
+    animation: pulseMustTake 0.8s ease-in-out infinite alternate !important;
+}
+
+@keyframes pulseMustTake {
+    from { transform: scale(1); filter: brightness(1); }
+    to { transform: scale(1.08); filter: brightness(1.3); }
+}
+
+@keyframes insertCardAnim {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.receipt-printer-module {
+    flex: 1;
+    background: #24242a;
+    border: 2px solid #3c3c46;
+    border-radius: 10px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.receipt-slot-hole {
+    width: 100px;
+    height: 6px;
+    background: #09090b;
+    border-radius: 3px;
+    position: relative;
+}
+
+.ejected-paper {
+    position: absolute;
+    top: 30px;
+    width: 85px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px;
+    font-family: monospace;
+    font-size: 7.5px;
+    line-height: 1.2;
+    color: #333;
+    display: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 25;
+}
+
+.ejected-paper.dispensing {
+    display: block;
+    animation: printPaper 0.9s ease-out forwards;
+}
+
+@keyframes printPaper {
+    from { height: 10px; opacity: 0; }
+    to { height: 50px; opacity: 1; }
+}
+
+/* ========================================================
+   🌟 [문제 해결 1] 버튼 바로 옆 깜빡이는 화살표 + 굵은 원포인트 글씨
+   타겟 요소 바로 옆/위에 부착되는 인라인 배지
+   ======================================================== */
+.btn-relative-wrap {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+/* 🌟 초강력 밝은 네온 유도등 (느리게 깜빡이는 펄스 애니메이션: 1.8s 주기) */
+.guide-highlight-pulse {
+    position: relative !important;
+    outline: 4px solid var(--neon-yellow) !important;
+    outline-offset: 3px !important;
+    animation: slowNeonBlink 1.8s ease-in-out infinite !important;
+    z-index: 45 !important;
+}
+
+@keyframes slowNeonBlink {
+    0%, 100% {
+        outline-color: rgba(255, 230, 0, 0.15);
+        box-shadow: 
+            0 0 0 1px rgba(255, 230, 0, 0.15),
+            0 0 6px rgba(255, 230, 0, 0.1);
+    }
+    50% {
+        outline-color: #ffffff;
+        box-shadow: 
+            0 0 0 4px var(--neon-yellow),
+            0 0 26px 8px var(--neon-glow),
+            0 0 45px 14px rgba(255, 119, 0, 0.7),
+            inset 0 0 12px rgba(255, 230, 0, 0.5);
+    }
+}
+
+/* 타겟 요소 바로 옆에 부착되는 [👉 터치!] 초간결 원포인트 배지 (유도등과 함께 부드럽게 점멸) */
+.guide-direct-badge {
+    position: absolute;
+    background: #000;
+    color: var(--neon-yellow);
+    border: 2px solid var(--neon-yellow);
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 900;
+    white-space: nowrap;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), 0 0 12px var(--neon-glow);
+    z-index: 999;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    animation: pointArrowBlink 1.8s ease-in-out infinite;
+}
+
+@keyframes pointArrowBlink {
+    0%, 100% {
+        opacity: 0.35;
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-5px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7), 0 0 16px var(--neon-glow);
+    }
+}
+
+/* 위치 조정 보조 클래스 */
+.guide-direct-badge.top-right {
+    top: -12px;
+    right: 8px;
+}
+
+.guide-direct-badge.top-center {
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.guide-direct-badge.right-side {
+    top: 50%;
+    right: -10px;
+    transform: translateY(-50%);
+}
+
+
+/* ========================================================
+   ① 단품 / 세트 선택 모달 스타일
+   ======================================================== */
+.set-select-sheet {
+    width: 100%;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 0 0 16px;
+    max-height: 92%;
+    overflow-y: auto;
+}
+
+.set-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 16px 8px;
+    border-bottom: 1px solid var(--mcd-gray-light);
+}
+
+.set-modal-item-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--mcd-dark);
+}
+
+.set-modal-subtext {
+    font-size: 13px;
+    color: var(--mcd-text-muted);
+    padding: 8px 16px 4px;
+    text-align: center;
+}
+
+.set-option-cards {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+}
+
+.set-option-card {
+    flex: 1;
+    border: 2.5px solid var(--mcd-gray-border);
+    border-radius: 14px;
+    padding: 16px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    position: relative;
+    overflow: visible;
+}
+
+.set-option-card:active {
+    transform: scale(0.97);
+}
+
+.set-option-card.set-card {
+    border-color: var(--mcd-yellow);
+    background: #fffde7;
+}
+
+.set-option-card.single-card:hover {
+    border-color: #999;
+    background: #f5f5f5;
+}
+
+.set-option-badge-rec {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--mcd-red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.set-option-icon {
+    font-size: 30px;
+    margin-bottom: 8px;
+}
+
+.set-option-label {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--mcd-dark);
+    margin-bottom: 4px;
+}
+
+.set-option-desc {
+    font-size: 12px;
+    color: var(--mcd-text-muted);
+    margin-bottom: 8px;
+}
+
+.set-option-price {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--mcd-red);
+}
+
+.set-modal-tip {
+    font-size: 12px;
+    color: var(--mcd-text-muted);
+    text-align: center;
+    padding: 0 16px 4px;
+}
+
+/* ========================================================
+   ② 사이즈 선택 모달 스타일
+   ======================================================== */
+.size-select-sheet {
+    width: 100%;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 0 0 20px;
+    max-height: 85%;
+    overflow-y: auto;
+}
+
+.size-option-cards {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
+}
+
+.size-option-card {
+    flex: 1;
+    border: 2.5px solid var(--mcd-gray-border);
+    border-radius: 14px;
+    padding: 20px 10px 16px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+
+.size-option-card.selected,
+.size-option-card.size-m-card {
+    border-color: var(--mcd-yellow);
+    background: #fffde7;
+}
+
+.size-option-card.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: #f5f5f5;
+}
+
+.size-option-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--mcd-yellow);
+    color: var(--mcd-dark);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.size-option-label {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--mcd-dark);
+    margin-bottom: 6px;
+}
+
+.size-option-desc {
+    font-size: 12px;
+    color: var(--mcd-text-muted);
+    margin-bottom: 8px;
+}
+
+.size-option-price {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--mcd-red);
+}
+
+.size-disabled-tag {
+    margin-top: 6px;
+    font-size: 11px;
+    color: #999;
+    background: #eee;
+    border-radius: 8px;
+    padding: 2px 8px;
+    display: inline-block;
+}
+
+/* ========================================================
+   ③ 음료 선택 모달 스타일
+   ======================================================== */
+.drink-select-sheet {
+    width: 100%;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 0 0 8px;
+    max-height: 90%;
+    overflow-y: auto;
+}
+
+.drink-option-list {
+    padding: 8px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.drink-option-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 2px solid var(--mcd-gray-border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.drink-option-item.selected {
+    border-color: var(--mcd-yellow);
+    background: #fffde7;
+}
+
+.drink-option-item:active {
+    transform: scale(0.98);
+}
+
+.drink-icon {
+    font-size: 28px;
+}
+
+.drink-info {
+    flex: 1;
+}
+
+.drink-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--mcd-dark);
+}
+
+.drink-cal {
+    font-size: 12px;
+    color: var(--mcd-text-muted);
+}
+
+.drink-check-mark {
+    font-size: 20px;
+    color: var(--mcd-red);
+    font-weight: 900;
+    transition: opacity 0.2s;
+}
+
+
+/* ========================================================
+   모달 내부 상단 미션 단계 바 & 장바구니 미션 배지
+   ======================================================== */
+.modal-mission-step-bar {
+    background: #111;
+    color: var(--neon-yellow);
+    font-size: 13.5px;
+    font-weight: 900;
+    padding: 8px 12px;
+    border-radius: 14px 14px 0 0;
+    text-align: center;
+    border-bottom: 2px solid var(--neon-yellow);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    letter-spacing: -0.2px;
+    display: none;
+}
+
+body.mission-mode-active .modal-mission-step-bar {
+    display: block;
+}
+
+.cart-mission-ready-badge {
+    position: absolute;
+    top: -28px;
+    right: 12px;
+    background: #000;
+    color: var(--neon-yellow);
+    border: 2px solid var(--neon-yellow);
+    box-shadow: 0 0 14px var(--neon-glow);
+    font-size: 12px;
+    font-weight: 900;
+    padding: 3px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    display: none;
+    animation: pointArrowAnim 0.7s ease-in-out infinite alternate;
+    z-index: 100;
+}
+
+.kiosk-bottom-cart-bar {
+    position: relative;
+    overflow: visible !important;
+}
